@@ -14,6 +14,8 @@ def main() -> None:
     parser.add_argument("--imgsz", type=int, default=640, help="Image size")
     parser.add_argument("--batch", type=int, default=16, help="Batch size")
     parser.add_argument("--name", default="bjj-detector", help="Run name")
+    parser.add_argument("--workers", type=int, default=0, help="Dataloader workers")
+    parser.add_argument("--device", default="0", help="Device (0 for GPU, cpu for CPU)")
     args = parser.parse_args()
 
     model = YOLO(args.model)
@@ -23,6 +25,8 @@ def main() -> None:
         imgsz=args.imgsz,
         batch=args.batch,
         name=args.name,
+        workers=args.workers,
+        device=args.device,
     )
 
     best_pt = Path(f"runs/detect/{args.name}/weights/best.pt")
