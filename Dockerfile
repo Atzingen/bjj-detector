@@ -12,7 +12,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
-COPY best.pt .
+COPY best.pt* .
 
 EXPOSE 7860
 
