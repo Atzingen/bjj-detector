@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Dataset (too large for git)
+data/images/
+data/images.zip
+data/annotations.json
+dataset/
+
+# Training runs
+runs/
+
+# Model weights (except best.pt for deploy)
+*.pt
+!best.pt
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+
+# OS
+.DS_Store
+Thumbs.db
