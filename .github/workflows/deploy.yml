@@ -1,0 +1,21 @@
+name: Deploy to hostinger-01
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST_HOSTINGER01 }}
+          username: ${{ secrets.SSH_USER_HOSTINGER01 }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_HOSTINGER01 }}
+          script: |
+            cd /var/local/apps/bjj-detector
+            git pull origin main
+            docker compose up --build -d
+            echo "Deploy complete"
