@@ -12,7 +12,7 @@ POSITION_MAP: dict[str, int] = {
     "open_guard": 2,
     "half_guard": 3,
     "closed_guard": 4,
-    "50-50": 5,
+    "5050_guard": 5,
     "side_control": 6,
     "mount": 7,
     "back": 8,
@@ -125,10 +125,10 @@ def convert_dataset(
 
     for split_name, split_annotations in splits.items():
         for ann in split_annotations:
-            img_name = ann["Image"]
-            position = ann["Position"]
-            pose1 = ann["Pose1"]
-            pose2 = ann["Pose2"]
+            img_name = ann["image"]
+            position = ann["position"]
+            pose1 = ann.get("pose1", [])
+            pose2 = ann.get("pose2", [])
 
             img_path = None
             for ext in ("", ".jpg", ".png", ".jpeg"):

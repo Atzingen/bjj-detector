@@ -62,7 +62,7 @@ def test_map_position_all_classes():
         "open_guard1": 2, "open_guard2": 2,
         "half_guard1": 3, "half_guard2": 3,
         "closed_guard1": 4, "closed_guard2": 4,
-        "50-501": 5, "50-502": 5,
+        "5050_guard": 5,
         "side_control1": 6, "side_control2": 6,
         "mount1": 7, "mount2": 7,
         "back1": 8, "back2": 8,

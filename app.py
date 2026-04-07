@@ -118,7 +118,7 @@ footer {
 
 
 def build_app() -> gr.Blocks:
-    with gr.Blocks(css=CUSTOM_CSS, title="BJJ Position Detector") as app:
+    with gr.Blocks(title="BJJ Position Detector") as app:
         gr.HTML('<div class="header-title">BJJ Position Detector</div>')
         gr.HTML('<div class="header-subtitle">Detecte posicoes de jiu-jitsu com Inteligencia Artificial</div>')
 
@@ -164,4 +164,6 @@ if __name__ == "__main__":
     app.launch(
         server_name=os.environ.get("GRADIO_SERVER_NAME", "0.0.0.0"),
         server_port=int(os.environ.get("GRADIO_SERVER_PORT", "7860")),
+        css=CUSTOM_CSS,
+        share=True,
     )
