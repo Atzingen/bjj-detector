@@ -698,10 +698,11 @@ body {
     cursor: pointer;
     transition: all var(--transition);
     background: var(--black-card);
-    min-height: 300px;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 .dropzone:hover,
@@ -730,6 +731,8 @@ body {
 .dropzone-preview {
     position: absolute;
     inset: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
     object-fit: contain;
     border-radius: var(--radius);
     background: var(--black);
@@ -745,7 +748,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 300px;
+    height: 400px;
     background: var(--black-card);
     border: 1px solid var(--gray-900);
     border-radius: var(--radius-lg);
@@ -755,7 +758,7 @@ body {
 
 .result-image {
     width: 100%;
-    max-height: 500px;
+    height: 400px;
     object-fit: contain;
     border-radius: var(--radius-lg);
     border: 1px solid var(--gray-900);

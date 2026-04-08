@@ -217,9 +217,13 @@ def api_search_images():
     import urllib.request
     import re
 
-    query = request.args.get("q", "")
+    query = request.args.get("q", "").strip()
     if not query:
         return jsonify({"images": []})
+
+    # Auto-add "jiu jitsu" if not present
+    if "jiu" not in query.lower() and "bjj" not in query.lower():
+        query = f"jiu jitsu {query}"
 
     search_url = (
         "https://www.bing.com/images/search?q="
