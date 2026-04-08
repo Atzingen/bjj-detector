@@ -175,7 +175,7 @@ def convert_dataset(
     print(f"Converted {stats['total']} images, skipped {stats['skipped']}")
 
     yaml_path = output_dir / "dataset.yaml"
-    yaml_content = f"""path: {output_dir.resolve()}
+    yaml_content = f"""path: .
 train: train/images
 val: val/images
 

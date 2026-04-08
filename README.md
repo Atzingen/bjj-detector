@@ -1,8 +1,8 @@
 # BJJ Position Detector
 
-Detecção de posições de jiu-jitsu em imagens usando YOLO11.
+Deteccao de posicoes de jiu-jitsu em imagens e videos usando YOLO11.
 
-## Classes
+## Posicoes Detectaveis
 
 | ID | Posicao | Descricao |
 |----|---------|-----------|
@@ -28,17 +28,39 @@ pip install -r requirements.txt
 ## Dataset
 
 ```bash
-python data/download.py
-python scripts/convert_dataset.py
+python data/download.py              # baixa ~10GB do ViCoS Lab
+python scripts/convert_dataset.py    # converte para formato YOLO
 ```
 
 ## Treino
 
 ```bash
-python train.py
+# Local (requer GPU)
+python train.py --epochs 50 --batch 16
+
+# Via Docker (recomendado — evita problemas de compatibilidade)
+docker compose -f docker-compose.train.yml up
 ```
 
-## Interface
+Os pesos ficam em `runs/detect/bjj-detector/weights/best.pt`.
+Copie para a raiz do projeto: `cp runs/detect/bjj-detector/weights/best.pt best.pt`
+
+## Interfaces
+
+### Flask (principal)
+
+```bash
+python webapp.py
+```
+
+Acesse http://localhost:5000 — login: `demo` / `demo1234`
+
+Funcionalidades:
+- Upload de imagem (drag-and-drop)
+- Captura pela camera do celular
+- Processamento de video frame a frame
+
+### Gradio (simples)
 
 ```bash
 python app.py
@@ -50,6 +72,26 @@ Acesse http://localhost:7860
 
 ```bash
 docker compose up --build -d
+```
+
+## Estrutura
+
+```
+bjj-detector/
+├── data/
+│   └── download.py              # baixa dataset ViCoS
+├── scripts/
+│   └── convert_dataset.py       # COCO keypoints -> YOLO bboxes
+├── templates/                   # templates Flask
+├── static/                      # CSS e JS
+├── tests/
+├── train.py                     # wrapper de treino YOLO11
+├── app.py                       # interface Gradio
+├── webapp.py                    # interface Flask (principal)
+├── docker-compose.yml           # deploy producao (Gradio)
+├── docker-compose.train.yml     # treino via Docker com GPU
+├── Dockerfile
+└── best.pt                      # modelo treinado
 ```
 
 ## Dataset

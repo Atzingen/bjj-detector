@@ -7,18 +7,23 @@ build/
 .venv/
 venv/
 
-# Dataset (too large for git)
+# Dataset — large files, download via data/download.py
 data/images/
 data/images.zip
 data/annotations.json
 dataset/
+dataset_mini/
 
-# Training runs
+# Training runs and caches
 runs/
+*.cache
 
 # Model weights (except best.pt for deploy)
 *.pt
 !best.pt
+
+# Gradio artifacts
+.gradio/
 
 # IDE
 .vscode/
@@ -30,3 +35,7 @@ runs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Windows path artifacts
+*;C/
+*;C

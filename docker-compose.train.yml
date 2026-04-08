@@ -1,0 +1,40 @@
+# Training compose — run with: docker compose -f docker-compose.train.yml up
+#
+# Prerequisites:
+#   1. python data/download.py          (download dataset to data/)
+#   2. python scripts/convert_dataset.py (convert to YOLO format in dataset/)
+#
+# Usage:
+#   docker compose -f docker-compose.train.yml up
+#
+# Weights saved to: runs/detect/bjj-detector/weights/best.pt
+# Copy to project root when done:
+#   cp runs/detect/bjj-detector/weights/best.pt best.pt
+
+services:
+  train:
+    image: ultralytics/ultralytics:latest
+    container_name: bjj-train
+    working_dir: /app
+    command: >
+      python /app/train.py
+        --data /app/dataset/dataset.yaml
+        --epochs 50
+        --batch 32
+        --workers 4
+        --device 0
+        --name bjj-detector
+    volumes:
+      - ./dataset:/app/dataset
+      - ./train.py:/app/train.py:ro
+      - ./runs:/app/runs
+    environment:
+      - YOLO_CONFIG_DIR=/app
+    shm_size: 8g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

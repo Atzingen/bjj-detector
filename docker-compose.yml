@@ -1,5 +1,6 @@
 services:
-  bjj-detector:
+  # Production web app (Gradio) — deploys to hostinger-01
+  web:
     build: .
     container_name: bjj-detector
     ports:
