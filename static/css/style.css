@@ -187,6 +187,14 @@ body {
 
 .btn--full { width: 100%; }
 
+.btn--xl {
+    padding: 20px 40px;
+    font-size: 1.15rem;
+    font-family: var(--font-display);
+    letter-spacing: 2px;
+    font-weight: 400;
+}
+
 /* ============================================
    HERO SECTION
    ============================================ */
@@ -970,6 +978,58 @@ body {
     color: var(--gray-400);
     padding: 32px;
     font-size: 0.9rem;
+}
+
+/* ============================================
+   POSITIONS REFERENCE
+   ============================================ */
+.positions-reference {
+    margin-top: 48px;
+    padding: 32px;
+    background: var(--black-card);
+    border: 1px solid var(--gray-900);
+    border-radius: var(--radius-lg);
+}
+
+.positions-ref-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--gray-400);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.positions-ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+}
+
+.pos-tag {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--black);
+    border: 1px solid var(--gray-900);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--white-muted);
+    transition: all var(--transition);
+}
+
+.pos-tag:hover {
+    border-color: var(--crimson);
+    color: var(--white);
+}
+
+.pos-tag-id {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--crimson);
+    min-width: 24px;
 }
 
 /* ============================================

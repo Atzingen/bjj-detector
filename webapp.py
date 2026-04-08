@@ -212,7 +212,7 @@ def api_detect_video():
 @app.route("/api/search-images")
 @login_required
 def api_search_images():
-    """Search Google Images via scraping and return thumbnail URLs."""
+    """Search Bing Images and return image URLs."""
     import urllib.parse
     import urllib.request
     import re
@@ -222,7 +222,7 @@ def api_search_images():
         return jsonify({"images": []})
 
     search_url = (
-        "https://www.google.com/search?tbm=isch&q="
+        "https://www.bing.com/images/search?q="
         + urllib.parse.quote(query)
     )
     req = urllib.request.Request(search_url, headers={
@@ -230,21 +230,17 @@ def api_search_images():
     })
 
     try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:
             html = resp.read().decode("utf-8", errors="ignore")
     except Exception:
         return jsonify({"images": []})
 
-    # Extract image URLs from Google Images HTML
-    # Google embeds base64 thumbnails and also links to original images
-    urls = re.findall(r'https?://[^"\'<>\s]+\.(?:jpg|jpeg|png|webp)', html, re.IGNORECASE)
+    # Bing stores original image URLs in murl attribute (HTML-encoded JSON)
+    urls = re.findall(r'murl&quot;:&quot;(https?://[^&]+)', html, re.IGNORECASE)
 
-    # Filter out Google's own assets
     filtered = []
     seen = set()
     for url in urls:
-        if "google.com" in url or "gstatic.com" in url or "googleapis.com" in url:
-            continue
         if url in seen:
             continue
         seen.add(url)
