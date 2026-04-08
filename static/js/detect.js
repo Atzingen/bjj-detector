@@ -68,8 +68,8 @@ function initImageUpload() {
         btnDetect.disabled = false;
 
         // Reset results
-        resultImg.hidden = true;
-        placeholder.hidden = false;
+        resultImg.style.display = 'none';
+        placeholder.style.display = '';
         detectionsList.innerHTML = '';
     }
 
@@ -94,8 +94,8 @@ function initImageUpload() {
             }
 
             resultImg.src = data.image;
-            resultImg.hidden = false;
-            placeholder.hidden = true;
+            resultImg.style.display = 'block';
+            placeholder.style.display = 'none';
 
             renderDetections(detectionsList, data.detections);
         } catch (err) {
@@ -237,8 +237,8 @@ function initCamera() {
                 const data = await res.json();
 
                 resultImg.src = data.image;
-                resultImg.hidden = false;
-                placeholder.hidden = true;
+                resultImg.style.display = 'block';
+                placeholder.style.display = 'none';
 
                 renderDetections(detectionsList, data.detections);
             } catch (err) {
@@ -340,7 +340,8 @@ function initVideoUpload() {
             }
 
             resultVideo.src = data.video;
-            resultVideo.hidden = false;
+            resultVideo.style.display = 'block';
+            placeholder.style.display = 'none';
             placeholder.hidden = true;
 
             // Show detection summary
