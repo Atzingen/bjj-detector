@@ -27,13 +27,15 @@ def main() -> None:
         name=args.name,
         workers=args.workers,
         device=args.device,
+        project="runs/detect",
     )
 
     best_pt = Path(f"runs/detect/{args.name}/weights/best.pt")
     if best_pt.exists():
+        import shutil
         dest = Path("best.pt")
-        best_pt.rename(dest)
-        print(f"Best model saved to {dest}")
+        shutil.copy2(best_pt, dest)
+        print(f"Best model copied to {dest}")
 
 
 if __name__ == "__main__":

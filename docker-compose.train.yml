@@ -30,6 +30,7 @@ services:
       - ./runs:/app/runs
     environment:
       - YOLO_CONFIG_DIR=/app
+      - ULTRALYTICS_SETTINGS_DIR=/app
     shm_size: 8g
     deploy:
       resources:
