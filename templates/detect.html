@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Detector — BJJ Detector{% endblock %}
+
+{% block content %}
+<section class="detect-section">
+    <div class="container">
+        <div class="detect-header">
+            <h1 class="detect-title">DETECTOR</h1>
+            <p class="detect-subtitle">Envie uma imagem, tire uma foto ou suba um video</p>
+        </div>
+
+        <div class="detect-tabs">
+            <button class="tab-btn tab-btn--active" data-tab="upload">Imagem</button>
+            <button class="tab-btn" data-tab="camera">Camera</button>
+            <button class="tab-btn" data-tab="video">Video</button>
+        </div>
+
+        <!-- IMAGE UPLOAD TAB -->
+        <div class="tab-content tab-content--active" id="tab-upload">
+            <div class="detect-layout">
+                <div class="detect-input-area">
+                    <div class="dropzone" id="dropzone">
+                        <div class="dropzone-content">
+                            <div class="dropzone-icon">&#128248;</div>
+                            <p class="dropzone-text">Arraste uma imagem aqui</p>
+                            <p class="dropzone-hint">ou clique para selecionar</p>
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                        <img id="preview-img" class="dropzone-preview" hidden>
+                    </div>
+                    <button id="btn-detect" class="btn btn--primary btn--full" disabled>
+                        Detectar Posicoes
+                    </button>
+                </div>
+                <div class="detect-result-area">
+                    <div class="result-placeholder" id="result-placeholder">
+                        <p>O resultado aparecera aqui</p>
+                    </div>
+                    <img id="result-img" class="result-image" hidden>
+                    <div id="detections-list" class="detections-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CAMERA TAB -->
+        <div class="tab-content" id="tab-camera">
+            <div class="detect-layout">
+                <div class="detect-input-area">
+                    <div class="camera-container">
+                        <video id="camera-feed" autoplay playsinline class="camera-feed"></video>
+                        <canvas id="camera-canvas" hidden></canvas>
+                    </div>
+                    <div class="camera-controls">
+                        <button id="btn-start-camera" class="btn btn--ghost btn--full">Iniciar Camera</button>
+                        <button id="btn-capture" class="btn btn--primary btn--full" hidden>
+                            Capturar e Detectar
+                        </button>
+                    </div>
+                </div>
+                <div class="detect-result-area">
+                    <div class="result-placeholder" id="camera-result-placeholder">
+                        <p>Capture uma foto para analisar</p>
+                    </div>
+                    <img id="camera-result-img" class="result-image" hidden>
+                    <div id="camera-detections-list" class="detections-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIDEO TAB -->
+        <div class="tab-content" id="tab-video">
+            <div class="detect-layout detect-layout--video">
+                <div class="detect-input-area">
+                    <div class="dropzone" id="video-dropzone">
+                        <div class="dropzone-content">
+                            <div class="dropzone-icon">&#127909;</div>
+                            <p class="dropzone-text">Arraste um video aqui</p>
+                            <p class="dropzone-hint">MP4, MOV, AVI</p>
+                        </div>
+                        <input type="file" id="video-input" accept="video/*" hidden>
+                        <video id="video-preview" class="dropzone-preview" controls hidden></video>
+                    </div>
+                    <div class="video-options">
+                        <label class="form-label">Pular frames (mais rapido):</label>
+                        <input type="range" id="skip-frames" min="0" max="10" value="3" class="range-input">
+                        <span id="skip-frames-val" class="range-val">Processar 1 a cada 4 frames</span>
+                    </div>
+                    <button id="btn-detect-video" class="btn btn--primary btn--full" disabled>
+                        Processar Video
+                    </button>
+                    <div id="video-progress" class="progress-bar" hidden>
+                        <div class="progress-bar-fill" id="video-progress-fill"></div>
+                        <span class="progress-bar-text" id="video-progress-text">Processando...</span>
+                    </div>
+                </div>
+                <div class="detect-result-area">
+                    <div class="result-placeholder" id="video-result-placeholder">
+                        <p>O video processado aparecera aqui</p>
+                    </div>
+                    <video id="video-result" class="result-image" controls hidden></video>
+                    <div id="video-detections-list" class="detections-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/detect.js') }}"></script>
+{% endblock %}

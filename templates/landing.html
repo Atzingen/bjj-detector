@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}BJJ Detector — Identifique Posicoes de Jiu-Jitsu com IA{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-bg">
+        <div class="hero-grain"></div>
+        <div class="hero-gradient"></div>
+    </div>
+    <div class="hero-content">
+        <p class="hero-eyebrow">Inteligencia Artificial + Jiu-Jitsu</p>
+        <h1 class="hero-title">
+            IDENTIFIQUE<br>
+            <span class="hero-title--accent">POSICOES</span><br>
+            EM TEMPO REAL
+        </h1>
+        <p class="hero-subtitle">
+            Envie uma foto, tire do celular ou suba um video.<br>
+            Nosso modelo YOLO11 detecta 10 posicoes de jiu-jitsu instantaneamente.
+        </p>
+        <div class="hero-actions">
+            {% if session.get('user') %}
+                <a href="{{ url_for('detect') }}" class="btn btn--primary btn--lg">Abrir Detector</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn--primary btn--lg">Comecar Agora</a>
+            {% endif %}
+            <a href="#positions" class="btn btn--ghost btn--lg">Ver Posicoes</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">10</span>
+                <span class="stat-label">Posicoes</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">120K</span>
+                <span class="stat-label">Imagens</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">YOLO11</span>
+                <span class="stat-label">Modelo</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<section id="positions" class="positions-section">
+    <div class="container">
+        <div class="section-header">
+            <p class="section-eyebrow">Dataset ViCoS Lab</p>
+            <h2 class="section-title">10 POSICOES<br><span class="text-accent">DETECTAVEIS</span></h2>
+        </div>
+        <div class="positions-grid">
+            {% for pos in positions %}
+            <div class="position-card" style="--delay: {{ loop.index0 * 0.05 }}s">
+                <div class="position-card-number">{{ "%02d"|format(pos.id) }}</div>
+                <h3 class="position-card-title">{{ pos.label }}</h3>
+                <p class="position-card-desc">{{ pos.desc }}</p>
+                <div class="position-card-tag">{{ pos.name }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <p class="section-eyebrow">Funcionalidades</p>
+            <h2 class="section-title">COMO<br><span class="text-accent">FUNCIONA</span></h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128247;</div>
+                <h3>Foto do Celular</h3>
+                <p>Tire uma foto diretamente da camera do celular durante o treino</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128193;</div>
+                <h3>Arraste Imagem</h3>
+                <p>Arraste e solte qualquer imagem de jiu-jitsu para analise instantanea</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127909;</div>
+                <h3>Video Completo</h3>
+                <p>Suba um video e processe frame a frame com deteccao em cada momento</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-logo">
+            <span class="logo-icon">&#9733;</span>
+            <span class="logo-text">BJJ<span class="logo-accent">DETECTOR</span></span>
+        </div>
+        <p class="footer-text">
+            Modelo treinado com dataset
+            <a href="https://vicos.si/resources/jiujitsu/" target="_blank" rel="noopener">ViCoS Lab</a>
+            — CC BY-NC-SA 4.0
+        </p>
+    </div>
+</footer>
+{% endblock %}

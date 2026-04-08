@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Entrar — BJJ Detector{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">ENTRAR</h1>
+            <p class="auth-subtitle">Acesse o detector de posicoes</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert--error">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username" class="form-label">Usuario</label>
+                <input type="text" id="username" name="username" class="form-input"
+                       placeholder="seu usuario" required autofocus autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" id="password" name="password" class="form-input"
+                       placeholder="sua senha" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">Entrar</button>
+        </form>
+
+        <p class="auth-footer">
+            Demo: <code>demo</code> / <code>demo1234</code>
+        </p>
+    </div>
+</section>
+{% endblock %}

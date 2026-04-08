@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BJJ Detector{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('landing') }}" class="nav-logo">
+            <span class="logo-icon">&#9733;</span>
+            <span class="logo-text">BJJ<span class="logo-accent">DETECTOR</span></span>
+        </a>
+        <div class="nav-links">
+            {% if session.get('user') %}
+                <a href="{{ url_for('detect') }}" class="nav-link">Detector</a>
+                <a href="{{ url_for('logout') }}" class="nav-link nav-link--muted">Sair</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="nav-btn">Entrar</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
