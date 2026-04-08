@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initImageUpload();
+    initImageSearch();
     initCamera();
     initVideoUpload();
 });
@@ -73,13 +74,15 @@ function initImageUpload() {
     }
 
     btnDetect.addEventListener('click', async () => {
-        if (!selectedFile) return;
+        const fileToUse = btnDetect._searchFile || selectedFile;
+        if (!fileToUse) return;
 
         btnDetect.disabled = true;
         btnDetect.textContent = 'Analisando...';
+        btnDetect._searchFile = null;
 
         const formData = new FormData();
-        formData.append('image', selectedFile);
+        formData.append('image', fileToUse);
 
         try {
             const res = await fetch('/api/detect', { method: 'POST', body: formData });
@@ -102,6 +105,92 @@ function initImageUpload() {
             btnDetect.textContent = 'Detectar Posicoes';
         }
     });
+}
+
+/* ---- IMAGE SEARCH ---- */
+function initImageSearch() {
+    const searchInput = document.getElementById('search-input');
+    const btnSearch = document.getElementById('btn-search');
+    const resultsContainer = document.getElementById('search-results');
+    const hint = document.getElementById('search-hint');
+
+    async function doSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        resultsContainer.innerHTML = '<div class="search-loading">Buscando imagens...</div>';
+        hint.hidden = true;
+
+        try {
+            const res = await fetch(`/api/search-images?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+
+            resultsContainer.innerHTML = '';
+
+            if (!data.images || data.images.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-loading">Nenhuma imagem encontrada</div>';
+                return;
+            }
+
+            data.images.forEach(url => {
+                const thumb = document.createElement('div');
+                thumb.className = 'search-thumb';
+                thumb.innerHTML = `
+                    <img src="/api/proxy-image?url=${encodeURIComponent(url)}"
+                         alt="resultado" loading="lazy"
+                         onerror="this.parentElement.remove()">
+                    <div class="search-thumb-overlay"><span>Usar</span></div>
+                `;
+                thumb.addEventListener('click', () => selectSearchImage(url));
+                resultsContainer.appendChild(thumb);
+            });
+        } catch (err) {
+            resultsContainer.innerHTML = '<div class="search-loading">Erro na busca</div>';
+        }
+    }
+
+    btnSearch.addEventListener('click', doSearch);
+    searchInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') doSearch();
+    });
+}
+
+async function selectSearchImage(imageUrl) {
+    // Fetch the image via proxy, convert to File, and feed into the upload flow
+    try {
+        const res = await fetch(`/api/proxy-image?url=${encodeURIComponent(imageUrl)}`);
+        const blob = await res.blob();
+
+        const file = new File([blob], 'search-image.jpg', { type: blob.type || 'image/jpeg' });
+
+        // Feed into the existing upload UI
+        const preview = document.getElementById('preview-img');
+        const dropzone = document.getElementById('dropzone');
+        const btnDetect = document.getElementById('btn-detect');
+        const fileInput = document.getElementById('file-input');
+
+        const url = URL.createObjectURL(blob);
+        preview.src = url;
+        preview.hidden = false;
+        dropzone.querySelector('.dropzone-content').style.display = 'none';
+        btnDetect.disabled = false;
+
+        // Store the file for detection — use a custom property on the button
+        btnDetect._searchFile = file;
+
+        // Switch to upload tab to show the image
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('tab-btn--active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('tab-content--active'));
+        document.querySelector('[data-tab="upload"]').classList.add('tab-btn--active');
+        document.getElementById('tab-upload').classList.add('tab-content--active');
+        // Keep search visible too
+        document.getElementById('tab-upload-search').classList.add('tab-content--active');
+
+        // Auto-detect
+        btnDetect.click();
+    } catch (err) {
+        alert('Erro ao carregar imagem: ' + err.message);
+    }
 }
 
 /* ---- CAMERA ---- */

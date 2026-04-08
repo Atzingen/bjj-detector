@@ -859,6 +859,120 @@ body {
 }
 
 /* ============================================
+   IMAGE SEARCH
+   ============================================ */
+.search-section {
+    margin-top: 8px;
+    padding: 24px;
+    background: var(--black-card);
+    border: 1px solid var(--gray-900);
+    border-radius: var(--radius-lg);
+}
+
+.search-bar {
+    display: flex;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 14px 18px;
+    background: var(--black);
+    border: 1px solid var(--gray-800);
+    border-radius: var(--radius);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--transition);
+}
+
+.search-input:focus {
+    border-color: var(--crimson);
+    box-shadow: 0 0 0 3px var(--crimson-glow);
+}
+
+.search-input::placeholder { color: var(--gray-600); }
+
+.search-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+    max-height: 360px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-700) transparent;
+}
+
+.search-results:empty { display: none; }
+
+.search-thumb {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--transition);
+}
+
+.search-thumb:hover {
+    border-color: var(--crimson);
+    transform: scale(1.04);
+}
+
+.search-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.search-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(220, 38, 38, 0.0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition);
+    pointer-events: none;
+}
+
+.search-thumb:hover .search-thumb-overlay {
+    background: rgba(220, 38, 38, 0.2);
+}
+
+.search-thumb-overlay span {
+    opacity: 0;
+    color: white;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: opacity var(--transition);
+}
+
+.search-thumb:hover .search-thumb-overlay span {
+    opacity: 1;
+}
+
+.search-hint {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 0.85rem;
+    margin-top: 16px;
+}
+
+.search-loading {
+    text-align: center;
+    color: var(--gray-400);
+    padding: 32px;
+    font-size: 0.9rem;
+}
+
+/* ============================================
    ANIMATIONS
    ============================================ */
 @keyframes fadeInUp {

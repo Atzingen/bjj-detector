@@ -209,6 +209,74 @@ def api_detect_video():
         os.unlink(tmp_path)
 
 
+@app.route("/api/search-images")
+@login_required
+def api_search_images():
+    """Search Google Images via scraping and return thumbnail URLs."""
+    import urllib.parse
+    import urllib.request
+    import re
+
+    query = request.args.get("q", "")
+    if not query:
+        return jsonify({"images": []})
+
+    search_url = (
+        "https://www.google.com/search?tbm=isch&q="
+        + urllib.parse.quote(query)
+    )
+    req = urllib.request.Request(search_url, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    })
+
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            html = resp.read().decode("utf-8", errors="ignore")
+    except Exception:
+        return jsonify({"images": []})
+
+    # Extract image URLs from Google Images HTML
+    # Google embeds base64 thumbnails and also links to original images
+    urls = re.findall(r'https?://[^"\'<>\s]+\.(?:jpg|jpeg|png|webp)', html, re.IGNORECASE)
+
+    # Filter out Google's own assets
+    filtered = []
+    seen = set()
+    for url in urls:
+        if "google.com" in url or "gstatic.com" in url or "googleapis.com" in url:
+            continue
+        if url in seen:
+            continue
+        seen.add(url)
+        filtered.append(url)
+        if len(filtered) >= 20:
+            break
+
+    return jsonify({"images": filtered})
+
+
+@app.route("/api/proxy-image")
+@login_required
+def api_proxy_image():
+    """Proxy an external image URL to avoid CORS issues."""
+    import urllib.request
+
+    url = request.args.get("url", "")
+    if not url:
+        return jsonify({"error": "No URL provided"}), 400
+
+    try:
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        })
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = resp.read()
+            content_type = resp.headers.get("Content-Type", "image/jpeg")
+        return app.response_class(data, mimetype=content_type)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
 if __name__ == "__main__":
     app.run(
         host=os.environ.get("FLASK_HOST", "0.0.0.0"),
